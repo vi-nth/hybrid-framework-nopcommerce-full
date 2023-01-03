@@ -1,0 +1,2 @@
+[INFO ] [2023-01-02 22:53:13,135] OS name = windows 10
+[INFO ] [2023-01-02 22:53:13,143] Driver instance name = chromedriver: chrome on windows (ddbdf3d247909fc30ed96e69e842fb01)
