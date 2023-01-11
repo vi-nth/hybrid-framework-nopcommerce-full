@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 
 import PageUIs.com.nopcommerce.RegisterPageUI;
 import commons.BasePage;
+import commons.PageGeneratorManager;
 
 public class RegisterPageObject extends BasePage {
 	WebDriver driver;
@@ -58,6 +59,12 @@ public class RegisterPageObject extends BasePage {
 	public String getErrorMessageAtPasswordTextbox() {
 		waitForElementVisible(driver, RegisterPageUI.CONFRIM_PASSWORD_ERROR_MESSAGE);
 		return getElementText(driver, RegisterPageUI.CONFRIM_PASSWORD_ERROR_MESSAGE);
+	}
+
+	public LoginPageObject clickToPageLink(String pageLinkName) {
+		waitForElementClickable(driver, RegisterPageUI.DYNAMIC_PAGE_LINK, pageLinkName);
+		clickToElement(driver, RegisterPageUI.DYNAMIC_PAGE_LINK, pageLinkName);
+		return PageGeneratorManager.getLoginPage(driver);
 	}
 
 }

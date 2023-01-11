@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -12,6 +11,8 @@ import org.testng.annotations.Test;
 import com.aventstack.extentreports.Status;
 import com.nopcommerce.data.UserData;
 
+import PageObject.com.nopcommerce.LoginPageObject;
+import PageObject.com.nopcommerce.MyAccountPageObject;
 import PageObject.com.nopcommerce.RegisterPageObject;
 import PageObject.com.nopcommerce.UserHomePageObject;
 import commons.BaseTest;
@@ -23,8 +24,9 @@ public class Login extends BaseTest {
 	private WebDriver driver;
 	private UserHomePageObject userHomePage;
 	private RegisterPageObject registerPage;
-	private String emailAddress, invalidEmailAddress;
-
+	private LoginPageObject loginPage;
+	private MyAccountPageObject myAccountPage;
+	private String emailAddress, invalidEmailAddress, unexistingEmail;
 	DataHelper dataFaker;
 
 	@Parameters({ "browserName", "url" })
@@ -32,249 +34,123 @@ public class Login extends BaseTest {
 	public void beforeClass(String browserName, String appUrl) {
 
 		driver = getBrowserDriver(browserName, appUrl);
-
 		userHomePage = PageGeneratorManager.getUserHomePage(driver);
 
 		dataFaker = DataHelper.getDataHelper();
 
 		emailAddress = UserData.Register.EMAIL_ADDRESS + generateFakeNumber() + "@gmail.uk";
 		invalidEmailAddress = "automation@@gmail.com";
+		unexistingEmail = "abc123@gmail.uk";
 
-	}
-
-	@Test
-	public void Register_01_Emty_Data(Method method) {
-
-		ExtentTestManager.startTest(method.getName(), "Register successfully");
-		ExtentTestManager.getTest().log(Status.INFO, "HomePage - Step 01: Click on 'Register'link at menu");
+		
 		registerPage = userHomePage.clickToPageLink("Register");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 2:  Click on 'Register' Button");
-		registerPage.clickOnRegisterButton();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 3:  Verify error message is displayed at required fields");
-
-		Assert.assertEquals(registerPage.getErrorMessageAtFieldByID("FirstName-error"), "First name is required.");
-		Assert.assertEquals(registerPage.getErrorMessageAtFieldByID("LastName-error"), "Last name is required.");
-		Assert.assertEquals(registerPage.getErrorMessageAtFieldByID("Email-error"), "Email is required.");
-		Assert.assertEquals(registerPage.getErrorMessageAtFieldByID("Password-error"), "Password is required.");
-		Assert.assertEquals(registerPage.getErrorMessageAtFieldByID("ConfirmPassword-error"), "Password is required.");
-
-	}
-
-	@Test
-	public void Login_02_Invalid_Email() {
-		ExtentTestManager.getTest().log(Status.INFO, "HomePage - Step 01: Click on 'Register'link at menu");
-		registerPage = userHomePage.clickToPageLink("Register");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 02: Select gender at 'Gender' Checkbox with value is 'Female'");
+		
 		registerPage.selectGenderAtRadioButton("Male");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 03: Enter to 'Firstname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
 		registerPage.enterValueToTextoxByID(UserData.Register.FIRST_NAME, "FirstName");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 04: Enter to 'Lastname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
 		registerPage.enterValueToTextoxByID(UserData.Register.LAST_NAME, "LastName");
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 05: Select Date of birth at Dropdown with value is 10/8/1998");
 		registerPage.selectDateInDropDown(UserData.Register.DATE, "DateOfBirthDay");
 		registerPage.selectDateInDropDown(UserData.Register.MONTH, "DateOfBirthMonth");
 		registerPage.selectDateInDropDown(UserData.Register.YEAR, "DateOfBirthYear");
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 06:  Enter to 'Email Textbox' with invalid email is '" + invalidEmailAddress + "'  ");
-		registerPage.enterValueToTextoxByID(invalidEmailAddress, "Email");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 07:  Enter to 'Company Textbox' with value is '" + UserData.Register.COMPANY + "'  ");
-		registerPage.enterValueToTextoxByID(UserData.Register.COMPANY, "Company");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 08:  Check to 'Newsletter' Checkbox");
-		registerPage.checkNewsletterCheckbox();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 09:  Enter to 'Password Textbox' with value is '" + UserData.Register.PASSWORD + "'  ");
-		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "Password");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 10:  Enter to 'Confirm Password Textbox' with value is '" + UserData.Register.PASSWORD + "'   ");
-		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "ConfirmPassword");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 11:  Click on 'Register' Button");
-		registerPage.clickOnRegisterButton();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 12:  Verify 'Wrong Email' is displayed at Email Textbox");
-		Assert.assertEquals(registerPage.getErrorMessageAtFieldByID("Email-error"), "Wrong email");
-
-	}
-
-	@Test
-	public void Login_03_Valid_Email_And_Password() {
-		ExtentTestManager.getTest().log(Status.INFO, "HomePage - Step 01: Click on 'Register'link at menu");
-		registerPage = userHomePage.clickToPageLink("Register");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 02: Select gender at 'Gender' Checkbox with value is 'Female'");
-		registerPage.selectGenderAtRadioButton("Male");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 03: Enter to 'Firstname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.FIRST_NAME, "FirstName");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 04: Enter to 'Lastname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.LAST_NAME, "LastName");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 05: Select Date of birth at Dropdown with value is 10/8/1998");
-		registerPage.selectDateInDropDown(UserData.Register.DATE, "DateOfBirthDay");
-		registerPage.selectDateInDropDown(UserData.Register.MONTH, "DateOfBirthMonth");
-		registerPage.selectDateInDropDown(UserData.Register.YEAR, "DateOfBirthYear");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 06:  Enter to 'Email Textbox' with invalid email is '" + emailAddress + "'  ");
 		registerPage.enterValueToTextoxByID(emailAddress, "Email");
 		System.out.println("Emailinput:" + emailAddress);
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 07:  Enter to 'Company Textbox' with value is '" + UserData.Register.COMPANY + "'  ");
 		registerPage.enterValueToTextoxByID(UserData.Register.COMPANY, "Company");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 08:  Check to 'Newsletter' Checkbox");
 		registerPage.checkNewsletterCheckbox();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 09:  Enter to 'Password Textbox' with value is '" + UserData.Register.PASSWORD + "'  ");
 		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "Password");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 10:  Enter to 'Confirm Password Textbox' with value is '" + UserData.Register.PASSWORD + "'   ");
 		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "ConfirmPassword");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 11:  Click on 'Register' Button");
 		registerPage.clickOnRegisterButton();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 12:  Verify 'Your registration completed' is displayed");
-		Assert.assertEquals(registerPage.getSuccessfullRegisterMessage(), "Your registration completed");
 
 	}
 
 	@Test
-	public void Login_04_Existing_Email() {
-		ExtentTestManager.getTest().log(Status.INFO, "HomePage - Step 01: Click on 'Register'link at menu");
-		registerPage = userHomePage.clickToPageLink("Register");
+	public void Login_01_Empty_Data(Method method) {
+		ExtentTestManager.startTest(method.getName(), "Login unsuccessfully with empty data");
+		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 01: Click on 'Login' link at menu");
+		loginPage = registerPage.clickToPageLink("Log in");
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 02: Select gender at 'Gender' Checkbox with value is 'Female'");
-		registerPage.selectGenderAtRadioButton("Male");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 01: Click on Login Button");
+		loginPage.clickOnLoginButton();
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 03: Enter to 'Firstname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.FIRST_NAME, "FirstName");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 04: Enter to 'Lastname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.LAST_NAME, "LastName");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 05: Select Date of birth at Dropdown with value is 10/8/1998");
-		registerPage.selectDateInDropDown(UserData.Register.DATE, "DateOfBirthDay");
-		registerPage.selectDateInDropDown(UserData.Register.MONTH, "DateOfBirthMonth");
-		registerPage.selectDateInDropDown(UserData.Register.YEAR, "DateOfBirthYear");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 06:  Enter to 'Email Textbox' with existing email is '" + emailAddress + "'  ");
-		registerPage.enterValueToTextoxByID(emailAddress, "Email");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 07:  Enter to 'Company Textbox' with value is '" + UserData.Register.COMPANY + "'  ");
-		registerPage.enterValueToTextoxByID(UserData.Register.COMPANY, "Company");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 08:  Check to 'Newsletter' Checkbox");
-		registerPage.checkNewsletterCheckbox();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 09:  Enter to 'Password Textbox' with value is '" + UserData.Register.PASSWORD + "'  ");
-		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "Password");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 10:  Enter to 'Confirm Password Textbox' with value is '" + UserData.Register.PASSWORD + "'   ");
-		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "ConfirmPassword");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 11:  Click on 'Register' Button");
-		registerPage.clickOnRegisterButton();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 12:  Verify error message 'The specified email already exists' is displayed");
-		Assert.assertEquals(registerPage.getValidationEmailMessage(), "The specified email already exists");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 02: Verify error message 'Please enter your email' is displayed at Email Textbox");
+		Assert.assertEquals(loginPage.getErrorMessageAtRequiredField(), "Please enter your email");
 
 	}
 
 	@Test
-	public void Login_05_Valid_Email_And_Password_Less_Than_6_Chars() {
-		ExtentTestManager.getTest().log(Status.INFO, "HomePage - Step 01: Click on 'Register'link at menu");
-		registerPage = userHomePage.clickToPageLink("Register");
+	public void Login_02_Invalid_Email(Method method) {
+		ExtentTestManager.startTest(method.getName(), "Login unsuccessfully with Invalid Email");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 01: Enter invalid email '" + invalidEmailAddress + "'  to Email Textbox");
+		loginPage.enterToTextboxByID(invalidEmailAddress, "Email");
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 02: Select gender at 'Gender' Checkbox with value is 'Female'");
-		registerPage.selectGenderAtRadioButton("Male");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 02: Verify error message 'Wrong email' is displayed at Email Textbox");
+		Assert.assertEquals(loginPage.getErrorMessageAtRequiredField(), "Wrong email");
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 03: Enter to 'Firstname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.FIRST_NAME, "FirstName");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 04: Enter to 'Lastname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.LAST_NAME, "LastName");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 05: Select Date of birth at Dropdown with value is 10/8/1998");
-		registerPage.selectDateInDropDown(UserData.Register.DATE, "DateOfBirthDay");
-		registerPage.selectDateInDropDown(UserData.Register.MONTH, "DateOfBirthMonth");
-		registerPage.selectDateInDropDown(UserData.Register.YEAR, "DateOfBirthYear");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 06:  Enter to 'Email Textbox' with existent email is '" + emailAddress + "'  ");
-		registerPage.enterValueToTextoxByID(emailAddress, "Email");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 07:  Enter to 'Company Textbox' with value is '" + UserData.Register.COMPANY + "'  ");
-		registerPage.enterValueToTextoxByID(UserData.Register.COMPANY, "Company");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 08:  Check to 'Newsletter' Checkbox");
-		registerPage.checkNewsletterCheckbox();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 09:  Enter to 'Password Textbox' less  than 6 chars with value '123' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "Password");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 10:  Enter to 'Confirm Password Textbox'less  than 6 chars withvalue '123'");
-		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "ConfirmPassword");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 11:  Click on 'Register' Button");
-		registerPage.clickOnRegisterButton();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 12:  Verify error message 'The specified email already exists' is displayed");
-		Assert.assertEquals(registerPage.getErrorMessageAtFieldByID("Password-error"), "Password must meet the following rules:\nmust have at least 6 characters");
 	}
 
 	@Test
-	public void Login_06_Register_With_Incorrect_Password() {
-		ExtentTestManager.getTest().log(Status.INFO, "HomePage - Step 01: Click on 'Register'link at menu");
-		registerPage = userHomePage.clickToPageLink("Register");
+	public void Login_03_Unexisting_Email(Method method) {
+		ExtentTestManager.startTest(method.getName(), "Login unsuccessfully with unexisting Email");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 01: Enter unexisting email '" + unexistingEmail + "'  to Email Textbox");
+		loginPage.enterToTextboxByID(unexistingEmail, "Email");
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 02: Select gender at 'Gender' Checkbox with value is 'Female'");
-		registerPage.selectGenderAtRadioButton("Male");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 02: Enter password '" + UserData.Register.PASSWORD + "'  to Password Textbox");
+		loginPage.enterToTextboxByID(UserData.Register.PASSWORD, "Password");
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 03: Enter to 'Firstname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.FIRST_NAME, "FirstName");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 03: Click on Login Button");
+		loginPage.clickOnLoginButton();
 
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 04: Enter to 'Lastname Textbox' with value is '" + UserData.Register.FIRST_NAME + "' ");
-		registerPage.enterValueToTextoxByID(UserData.Register.LAST_NAME, "LastName");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 05: Select Date of birth at Dropdown with value is 10/8/1998");
-		registerPage.selectDateInDropDown(UserData.Register.DATE, "DateOfBirthDay");
-		registerPage.selectDateInDropDown(UserData.Register.MONTH, "DateOfBirthMonth");
-		registerPage.selectDateInDropDown(UserData.Register.YEAR, "DateOfBirthYear");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 06:  Enter to 'Email Textbox' with existent email is '" + emailAddress + "'  ");
-		registerPage.enterValueToTextoxByID(emailAddress, "Email");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 07:  Enter to 'Company Textbox' with value is '" + UserData.Register.COMPANY + "'  ");
-		registerPage.enterValueToTextoxByID(UserData.Register.COMPANY, "Company");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 08:  Check to 'Newsletter' Checkbox");
-		registerPage.checkNewsletterCheckbox();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 09:  Enter to 'Password Textbox' with value is '" + UserData.Register.PASSWORD + "'  ");
-		registerPage.enterValueToTextoxByID(UserData.Register.PASSWORD, "Password");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 10:  Enter to 'Confirm Password Textbox' with incorrect password  ");
-		registerPage.enterValueToTextoxByID("123", "ConfirmPassword");
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 11:  Click on 'Register' Button");
-		registerPage.clickOnRegisterButton();
-
-		ExtentTestManager.getTest().log(Status.INFO, "Register - Step 12:  Verify error message 'The specified email already exists' is displayed");
-		Assert.assertEquals(registerPage.getErrorMessageAtFieldByID("ConfirmPassword-error"), "The password and confirmation password do not match.");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 04: Verify error message contains 'No customer account found' is displayed");
+		Assert.assertEquals(loginPage.getErrorMessageValidation(), "Login was unsuccessful. Please correct the errors and try again.\nNo customer account found");
 
 	}
 
-	@AfterClass()
-	public void afterClass() {
-		// closeBrowserAndDriver();
+	@Test
+	public void Login_04_Correct_Email_And_Leave_Blank_Password(Method method) {
+		ExtentTestManager.startTest(method.getName(), "Login unsuccessfully when leave blank password ");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 01: Enter correct email '" + emailAddress + "'  to Email Textbox");
+		loginPage.enterToTextboxByID(emailAddress, "Email");
+
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 01: Click on Login Button");
+		loginPage.clickOnLoginButton();
+
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 02: Verify error message contains 'The credentials provided are incorrect' is displayed");
+		Assert.assertEquals(loginPage.getErrorMessageValidation(), "Login was unsuccessful. Please correct the errors and try again.\nThe credentials provided are incorrect");
+
+	}
+
+	@Test
+	public void Login_05_Correct_Email_And_Incorrect_Password(Method method) {
+		ExtentTestManager.startTest(method.getName(), "Login unsuccessfully with incorrect password");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 01: Enter correct email '" + emailAddress + "'  to Email Textbox");
+		loginPage.enterToTextboxByID(emailAddress, "Email");
+
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 02: Enter incorrect password '654321'  to Password Textbox");
+		loginPage.enterToTextboxByID("654321", "Password");
+
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 03: Click on Login Button");
+		loginPage.clickOnLoginButton();
+
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 04: Verify error message contains 'The credentials provided are incorrect' is displayed");
+		Assert.assertEquals(loginPage.getErrorMessageValidation(), "Login was unsuccessful. Please correct the errors and try again.\nThe credentials provided are incorrect");
+
+	}
+
+	@Test
+	public void Login_06_Correct_Email_And_Password(Method method) {
+		ExtentTestManager.startTest(method.getName(), "Login unsuccessfully with correct email and password");
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 01: Enter correct email '" + emailAddress + "'  to Email Textbox");
+		loginPage.enterToTextboxByID(emailAddress, "Email");
+
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 02: Enter correct password '" + UserData.Register.PASSWORD + "'  to Password Textbox");
+		loginPage.enterToTextboxByID(UserData.Register.PASSWORD, "Password");
+
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 03: Click on Login Button");
+		myAccountPage = loginPage.clickOnLoginButton();
+
+		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 04: Verify direct to Homepage successfully");
+		Assert.assertTrue(myAccountPage.isMyAccountPageDisplayed("My account"));
+
 	}
 
 }
