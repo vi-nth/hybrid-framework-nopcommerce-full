@@ -270,7 +270,7 @@ public class MyAccount extends BaseTest {
 		Assert.assertEquals(myAccountPage.getSuccessfullReviewedMessage(), "Product review is successfully added.");
 
 		ExtentTestManager.getTest().log(Status.INFO, "ProductReview - Step 10: Verify review title is displayed");
-		Assert.assertTrue(myAccountPage.isReviewTitleDisplayed("Good price"));
+		Assert.assertTrue(myAccountPage.isReviewTitleDisplayed("Price"));
 
 	}
 

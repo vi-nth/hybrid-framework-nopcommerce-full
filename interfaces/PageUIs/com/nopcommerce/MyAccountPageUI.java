@@ -11,6 +11,6 @@ public class MyAccountPageUI {
 	public static final String RATING="XPATH=//input[@id='%s']";
 	public static final String SUBMIT_REVIEW="XPATH=//button[text()='Submit review']";
 	public static final String RESULT_REVIEW="XPATH=//div[@class='page product-reviews-page']//div[@class='result']";
-	public static final String REVIEW_TITLE="XPATH=//div[@class='review-title']/strong[text()='asas']";
+	public static final String REVIEW_TITLE="XPATH=//div[@class='review-title']/strong[text()='%s']";
 
 }
