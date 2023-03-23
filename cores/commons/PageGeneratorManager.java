@@ -3,12 +3,18 @@ package commons;
 import org.openqa.selenium.WebDriver;
 
 import PageObject.com.nopcommerce.AddressPageObject;
+import PageObject.com.nopcommerce.CompareListPageObject;
 import PageObject.com.nopcommerce.LoginPageObject;
 import PageObject.com.nopcommerce.MyAccountPageObject;
+import PageObject.com.nopcommerce.MyOrdersPageObject;
+import PageObject.com.nopcommerce.RecentlyViewPageObject;
 import PageObject.com.nopcommerce.RegisterPageObject;
+import PageObject.com.nopcommerce.SearchPageObject;
+import PageObject.com.nopcommerce.ShopingCartPageObject;
 import PageObject.com.nopcommerce.UserAccountPageObject;
 import PageObject.com.nopcommerce.UserHomePageObject;
 import PageObject.com.nopcommerce.UserPasswordPageObject;
+import PageUIs.com.nopcommerce.WishlistPageObject;
 
 public class PageGeneratorManager {
 	
@@ -44,5 +50,29 @@ public class PageGeneratorManager {
 	public static UserPasswordPageObject getUserPasswordPage(WebDriver driver) {
 		return new UserPasswordPageObject(driver);
 		
+	}
+	
+	public static SearchPageObject getSearchPage(WebDriver driver) {
+		return new SearchPageObject(driver);
+	}
+	
+	public static WishlistPageObject getWishlistPage(WebDriver driver) {
+		return new WishlistPageObject(driver);
+	}
+	
+	public static ShopingCartPageObject getShopingCart(WebDriver driver) {
+		return new ShopingCartPageObject(driver);
+	}
+	
+	public static CompareListPageObject getCompareListPage (WebDriver driver) {
+		return new CompareListPageObject(driver);
+	}
+	
+	public static RecentlyViewPageObject getRecentlyViewPage(WebDriver driver) {
+		return new RecentlyViewPageObject(driver);
+	}
+	
+	public static MyOrdersPageObject getMyOrdersPage(WebDriver driver) {
+		return new MyOrdersPageObject(driver);
 	}
 }

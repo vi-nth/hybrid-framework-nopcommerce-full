@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="testcases"/>
 	<classpathentry kind="src" path="cores"/>
 	<classpathentry kind="src" path="interfaces"/>
@@ -27,7 +26,7 @@
 	<classpathentry kind="lib" path="libLog4J/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="libLog4J/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="libFaker/generex-1.0.2.jar"/>
-	<classpathentry kind="lib" path="libFaker/javafaker-1.0.1.jar"/>
+	<classpathentry kind="lib" path="libFaker/javafaker-1.0.1.jar" sourcepath="libFaker/javafaker-1.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="libFaker/javafaker-1.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="libFaker/snakeyaml-1.23.jar"/>
 	<classpathentry kind="lib" path="libExtentV5/extentreports-5.0.8.jar"/>

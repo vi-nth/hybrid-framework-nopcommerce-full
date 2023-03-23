@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -126,6 +127,7 @@ public class BaseTest {
 		} else if (browserList == BrowserList.CHROME) {
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions options = new ChromeOptions();
+			options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
 			driver = new ChromeDriver(options);
 		} else {
 			throw new RuntimeException("Browser name invalid");

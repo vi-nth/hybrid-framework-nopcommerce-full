@@ -11,10 +11,11 @@
 	</listeners>
 
 
-	<test name="Run on chrome">
-		<parameter name="browserName" value="chrome" />
+	<test name="Run on firefox">
+		<parameter name="browserName" value="firefox" />
+		
 		<classes>
-			<class name="com.nopcommerce.user.MyAccount" />
+			<class name="com.nopcommerce.user.Order" />
 
 		</classes>
 	</test>

@@ -10,6 +10,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -202,6 +203,16 @@ public class BasePage {
 
 	public List<WebElement> getListWebElement(WebDriver driver, String locatorType) {
 		return driver.findElements(getByLocator(locatorType));
+	}
+	
+	//Sort
+	public List<WebElement> getListWebElementSort(WebDriver driver, String locatorType) {
+	    WebDriverWait wait = new WebDriverWait(driver, 10);
+	    try {
+	        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(getByLocator(locatorType)));
+	    } catch (StaleElementReferenceException e) {
+	        return getListWebElementSort(driver, locatorType);
+	    }
 	}
 
 	protected void clickToElement(WebDriver driver, String locatorType) {
