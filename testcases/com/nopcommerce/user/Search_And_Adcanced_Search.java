@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -236,6 +237,11 @@ public class Search_And_Adcanced_Search extends BaseTest {
 		ExtentTestManager.getTest().log(Status.INFO, " - Step 07: Verify the resutls contains 'Apple MacBook Pro 13-inch'");
 		verifyEquals(searchPage.getErrorMessageText(), "Apple MacBook Pro 13-inch");
 
+	}
+	
+	@AfterClass(alwaysRun = true)
+	public void afterClass() {
+		closeBrowserAndDriver();
 	}
 
 }

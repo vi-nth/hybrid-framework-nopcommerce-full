@@ -3,6 +3,7 @@ package com.nopcommerce.user;
 import java.lang.reflect.Method;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -1275,6 +1276,10 @@ public class Order extends BaseTest {
 		ExtentTestManager.getTest().log(Status.INFO, " Reorder - Step 108: Verify Total is '$18,000.00'");
 		verifyEquals(myOrdersPage.getPriceDetail("Order Total:"), "$18,000.00");
 
+	}
+	@AfterClass(alwaysRun = true)
+	public void afterClass() {
+		closeBrowserAndDriver();
 	}
 
 }

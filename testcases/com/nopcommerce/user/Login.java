@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -151,6 +152,11 @@ public class Login extends BaseTest {
 		ExtentTestManager.getTest().log(Status.INFO, "Login - Step 04: Verify direct to Homepage successfully");
 		Assert.assertTrue(myAccountPage.isMyAccountPageDisplayed("My account"));
 
+	}
+	
+	@AfterClass(alwaysRun = true)
+	public void afterClass() {
+		closeBrowserAndDriver();
 	}
 
 }
